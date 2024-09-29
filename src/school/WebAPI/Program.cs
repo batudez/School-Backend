@@ -64,6 +64,14 @@ builder.Services.AddCors(opt =>
         p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     })
 );
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.WriteIndented = true; // Optional for readable JSON formatting
+    });
+
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.AddSecurityDefinition(

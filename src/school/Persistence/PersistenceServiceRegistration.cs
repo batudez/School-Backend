@@ -1,4 +1,4 @@
-﻿using Application.Services.Repositories;
+using Application.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,8 +12,9 @@ public static class PersistenceServiceRegistration
 {
     public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<BaseDbContext>(options => options.UseInMemoryDatabase("BaseDb"));
-        services.AddDbMigrationApplier(buildServices => buildServices.GetRequiredService<BaseDbContext>());
+        services.AddDbContext<SchoolDbContext>(opt =>
+            opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+        services.AddDbMigrationApplier(buildServices => buildServices.GetRequiredService<SchoolDbContext>());
 
         services.AddScoped<IEmailAuthenticatorRepository, EmailAuthenticatorRepository>();
         services.AddScoped<IOperationClaimRepository, OperationClaimRepository>();
@@ -22,6 +23,12 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserOperationClaimRepository, UserOperationClaimRepository>();
 
+        services.AddScoped<IStudentRepository, StudentRepository>();
+        services.AddScoped<ICourseRepository, CourseRepository>();
+        services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
+        services.AddScoped<IInstructorRepository, InstructorRepository>();
+        services.AddScoped<INoteRepository, NoteRepository>();
+        services.AddScoped<IStudentRepository, StudentRepository>();
         return services;
     }
 }

@@ -34,7 +34,8 @@ public class UserOperationClaimConfiguration : IEntityTypeConfiguration<UserOper
             yield return new()
             {
                 Id = Guid.NewGuid(),
-                UserId = UserConfiguration.AdminId,
+                //UserId = UserConfiguration.AdminId,
+                UserId = new Guid("faeac8f0-3125-4f44-a860-b8c6887235af"),
                 OperationClaimId = OperationClaimConfiguration.AdminId
             };
         }

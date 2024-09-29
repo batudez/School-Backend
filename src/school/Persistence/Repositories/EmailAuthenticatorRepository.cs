@@ -6,9 +6,9 @@ using Persistence.Contexts;
 namespace Persistence.Repositories;
 
 public class EmailAuthenticatorRepository
-    : EfRepositoryBase<EmailAuthenticator, Guid, BaseDbContext>,
+    : EfRepositoryBase<EmailAuthenticator, Guid, SchoolDbContext>,
         IEmailAuthenticatorRepository
 {
-    public EmailAuthenticatorRepository(BaseDbContext context)
+    public EmailAuthenticatorRepository(SchoolDbContext context)
         : base(context) { }
 }
