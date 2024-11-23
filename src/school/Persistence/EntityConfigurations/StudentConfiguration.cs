@@ -18,6 +18,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         builder.Property(s => s.Password).HasColumnName("Password").IsRequired();
         builder.Property(s => s.PasswordConfirm).HasColumnName("PasswordConfirm").IsRequired();
         builder.Property(s => s.ImageUrl).HasColumnName("ImageUrl").IsRequired();
+        builder.Property(s => s.UserId).HasColumnName("UserId").IsRequired();
         builder.Property(s => s.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(s => s.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(s => s.DeletedDate).HasColumnName("DeletedDate");

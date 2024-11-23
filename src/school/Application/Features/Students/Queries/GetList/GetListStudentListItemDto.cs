@@ -12,4 +12,5 @@ public class GetListStudentListItemDto : IDto
     public string Password { get; set; }
     public string PasswordConfirm { get; set; }
     public string ImageUrl { get; set; }
+    public Guid UserId { get; set; }
 }

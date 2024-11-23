@@ -6,6 +6,7 @@ using Application.Features.Courses.Queries.GetList;
 using NArchitecture.Core.Application.Requests;
 using NArchitecture.Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Application.Features.Courses.Queries.GetByInstructorId;
 
 namespace WebAPI.Controllers;
 
@@ -55,6 +56,15 @@ public class CoursesController : BaseController
         GetListCourseQuery query = new() { PageRequest = pageRequest };
 
         GetListResponse<GetListCourseListItemDto> response = await Mediator.Send(query);
+
+        return Ok(response);
+    }
+    [HttpGet("instructor/{instructorId}")]
+    public async Task<ActionResult<GetListResponse<GetByInstructorIdQuery>>> GetList([FromRoute] Guid instructorId)
+    {
+        GetByInstructorIdQuery query = new() {  InstructorId = instructorId };
+
+        GetListResponse<GetByInstructorIdItemDto> response = await Mediator.Send(query);
 
         return Ok(response);
     }

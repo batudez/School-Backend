@@ -12,8 +12,8 @@ using Persistence.Contexts;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20240928231813_mig_initial_test")]
-    partial class mig_initial_test
+    [Migration("20240929130519_mig_4")]
+    partial class mig_4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -880,6 +880,36 @@ namespace Persistence.Migrations
                     b.ToTable("Students", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.StudentOperationClaim", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("OperationClaimId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OperationClaimId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentOperationClaim");
+                });
+
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -925,12 +955,12 @@ namespace Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("31e439fc-c268-4b9a-8b6a-1bda7dcd539a"),
+                            Id = new Guid("6ab83670-d677-400c-8f8c-4c515588e2ac"),
                             AuthenticatorType = 0,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "narch@kodlama.io",
-                            PasswordHash = new byte[] { 59, 231, 103, 170, 55, 37, 176, 96, 44, 220, 201, 134, 214, 63, 251, 154, 188, 76, 125, 179, 208, 193, 159, 217, 18, 59, 78, 255, 196, 230, 81, 172, 177, 91, 142, 117, 24, 10, 215, 219, 15, 235, 83, 119, 213, 167, 103, 202, 45, 88, 52, 10, 148, 132, 16, 134, 171, 5, 1, 225, 34, 181, 93, 27 },
-                            PasswordSalt = new byte[] { 108, 68, 9, 147, 130, 230, 61, 231, 224, 108, 202, 251, 110, 34, 206, 206, 247, 156, 63, 8, 13, 126, 140, 82, 112, 91, 236, 63, 140, 241, 156, 222, 35, 195, 126, 190, 204, 180, 239, 20, 45, 168, 210, 201, 48, 112, 186, 127, 28, 131, 250, 75, 189, 126, 60, 42, 29, 12, 226, 82, 244, 22, 156, 98, 1, 36, 236, 100, 179, 73, 241, 204, 197, 8, 193, 172, 44, 63, 60, 2, 247, 147, 49, 72, 177, 181, 18, 67, 161, 122, 132, 73, 245, 179, 187, 70, 48, 211, 11, 238, 109, 109, 131, 113, 51, 84, 102, 16, 4, 148, 124, 206, 69, 185, 216, 9, 252, 63, 0, 211, 217, 202, 207, 167, 145, 222, 71, 129 }
+                            PasswordHash = new byte[] { 66, 217, 46, 106, 193, 244, 105, 123, 131, 100, 185, 220, 206, 144, 113, 174, 203, 177, 120, 79, 69, 213, 30, 132, 45, 198, 232, 79, 108, 135, 218, 73, 174, 92, 118, 154, 32, 116, 222, 249, 243, 195, 197, 161, 158, 175, 2, 201, 254, 188, 210, 33, 238, 138, 45, 20, 44, 240, 106, 129, 31, 114, 8, 169 },
+                            PasswordSalt = new byte[] { 15, 113, 97, 157, 193, 112, 255, 164, 224, 113, 118, 197, 72, 156, 243, 44, 38, 9, 59, 7, 150, 150, 98, 99, 14, 216, 115, 36, 219, 172, 12, 232, 246, 81, 129, 2, 109, 225, 5, 126, 170, 118, 155, 69, 128, 171, 118, 120, 196, 100, 107, 35, 22, 82, 52, 197, 201, 37, 35, 199, 90, 255, 45, 221, 2, 119, 143, 105, 72, 22, 92, 23, 205, 79, 11, 80, 245, 35, 55, 210, 56, 196, 224, 156, 82, 212, 45, 163, 153, 128, 184, 78, 144, 209, 34, 228, 208, 38, 19, 153, 106, 26, 161, 111, 34, 7, 137, 222, 107, 194, 3, 166, 49, 185, 185, 19, 128, 178, 110, 7, 87, 137, 224, 101, 30, 211, 253, 176 }
                         });
                 });
 
@@ -972,10 +1002,10 @@ namespace Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("07e20041-0d0a-4929-8b97-54edcfa618ac"),
+                            Id = new Guid("22373cb3-a466-4c25-85f0-521a64bbc3da"),
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             OperationClaimId = 1,
-                            UserId = new Guid("faeac8f0-3125-4f44-a860-b8c6887235af")
+                            UserId = new Guid("6a90dd73-a134-476f-b072-5ba502c1e7dd")
                         });
                 });
 
@@ -1080,6 +1110,25 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.StudentOperationClaim", b =>
+                {
+                    b.HasOne("Domain.Entities.OperationClaim", "OperationClaim")
+                        .WithMany()
+                        .HasForeignKey("OperationClaimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Student", "Student")
+                        .WithMany("StudentOperationClaims")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OperationClaim");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("Domain.Entities.UserOperationClaim", b =>
                 {
                     b.HasOne("Domain.Entities.OperationClaim", "OperationClaim")
@@ -1127,6 +1176,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Student", b =>
                 {
                     b.Navigation("Notes");
+
+                    b.Navigation("StudentOperationClaims");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>

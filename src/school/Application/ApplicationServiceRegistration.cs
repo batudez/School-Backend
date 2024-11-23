@@ -25,6 +25,7 @@ using Application.Services.Courses;
 using Application.Services.Announcements;
 using Application.Services.Instructors;
 using Application.Services.Notes;
+using Application.Services.StudentOperationClaims;
 
 namespace Application;
 
@@ -73,6 +74,8 @@ public static class ApplicationServiceRegistration
         services.AddScoped<INoteService, NoteManager>();
         services.AddScoped<IStudentService, StudentManager>();
         services.AddScoped<IStudentService, StudentManager>();
+        services.AddScoped<IStudentService, StudentManager>();
+        services.AddScoped<IStudentOperationClaimService, StudentOperationClaimManager>();
         services.AddScoped<IStudentService, StudentManager>();
         return services;
     }

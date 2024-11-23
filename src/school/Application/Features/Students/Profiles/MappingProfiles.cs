@@ -7,6 +7,7 @@ using AutoMapper;
 using NArchitecture.Core.Application.Responses;
 using Domain.Entities;
 using NArchitecture.Core.Persistence.Paging;
+using Application.Features.Students.Queries.GetByEmailStudent;
 
 namespace Application.Features.Students.Profiles;
 
@@ -24,6 +25,8 @@ public class MappingProfiles : Profile
         CreateMap<Student, DeletedStudentResponse>();
 
         CreateMap<Student, GetByIdStudentResponse>();
+
+        CreateMap<Student, GetByEmailStudentResponse>().ReverseMap();
 
         CreateMap<Student, GetListStudentListItemDto>();
         CreateMap<IPaginate<Student>, GetListResponse<GetListStudentListItemDto>>();

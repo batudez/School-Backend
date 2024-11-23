@@ -12,13 +12,12 @@ namespace Application.Features.Students.Commands.Update;
 public class UpdateStudentCommand : IRequest<UpdatedStudentResponse>, ISecuredRequest
 {
     public Guid Id { get; set; }
-    public required string NameSurname { get; set; }
-    public required string Email { get; set; }
-    public required string TelephoneNumber { get; set; }
-    public required string Address { get; set; }
-    public required string Password { get; set; }
-    public required string PasswordConfirm { get; set; }
-    public required string ImageUrl { get; set; }
+    public  string NameSurname { get; set; }
+    public  string Email { get; set; }
+    public  string TelephoneNumber { get; set; }
+    public  string Address { get; set; }
+    public  string ImageUrl { get; set; }
+
 
     public string[] Roles => [Admin, Write, StudentsOperationClaims.Update];
 

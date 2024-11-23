@@ -7,6 +7,7 @@ using AutoMapper;
 using NArchitecture.Core.Application.Responses;
 using Domain.Entities;
 using NArchitecture.Core.Persistence.Paging;
+using Application.Features.Instructors.Queries.GetByEmail;
 
 namespace Application.Features.Instructors.Profiles;
 
@@ -16,6 +17,8 @@ public class MappingProfiles : Profile
     {
         CreateMap<CreateInstructorCommand, Instructor>();
         CreateMap<Instructor, CreatedInstructorResponse>();
+
+        CreateMap<Instructor, GetByEmailInstructorResponse>();
 
         CreateMap<UpdateInstructorCommand, Instructor>();
         CreateMap<Instructor, UpdatedInstructorResponse>();

@@ -57,6 +57,7 @@ public class LoginCommand : IRequest<LoggedResponse>
             await _authBusinessRules.UserPasswordShouldBeMatch(user!, request.UserForLoginDto.Password);
 
             LoggedResponse loggedResponse = new();
+            loggedResponse.Email = request.UserForLoginDto.Email;
 
             if (user!.AuthenticatorType is not AuthenticatorType.None)
             {
@@ -75,7 +76,6 @@ public class LoginCommand : IRequest<LoggedResponse>
             Domain.Entities.RefreshToken createdRefreshToken = await _authService.CreateRefreshToken(user, request.IpAddress);
             Domain.Entities.RefreshToken addedRefreshToken = await _authService.AddRefreshToken(createdRefreshToken);
             await _authService.DeleteOldRefreshTokens(user.Id);
-
             loggedResponse.AccessToken = createdAccessToken;
             loggedResponse.RefreshToken = addedRefreshToken;
             return loggedResponse;

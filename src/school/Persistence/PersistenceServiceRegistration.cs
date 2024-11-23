@@ -22,12 +22,14 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserOperationClaimRepository, UserOperationClaimRepository>();
+        services.AddScoped<IStudentOperationClaimRepository, StudentOperationClaimRepository>();
 
         services.AddScoped<IStudentRepository, StudentRepository>();
         services.AddScoped<ICourseRepository, CourseRepository>();
         services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
         services.AddScoped<IInstructorRepository, InstructorRepository>();
         services.AddScoped<INoteRepository, NoteRepository>();
+        services.AddScoped<IStudentRepository, StudentRepository>();
         services.AddScoped<IStudentRepository, StudentRepository>();
         return services;
     }

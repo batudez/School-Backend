@@ -9,19 +9,16 @@ using NArchitecture.Core.Application.Responses;
 using NArchitecture.Core.Persistence.Paging;
 using MediatR;
 using static Application.Features.Notes.Constants.NotesOperationClaims;
+using Microsoft.EntityFrameworkCore;
+using Application.Features.Notes.Queries.GetNotesByStudentId;
 
 namespace Application.Features.Notes.Queries.GetList;
 
-public class GetListNoteQuery : IRequest<GetListResponse<GetListNoteListItemDto>>, ISecuredRequest, ICachableRequest
+public class GetListNoteQuery : IRequest<GetListResponse<GetListNoteListItemDto>>, ISecuredRequest
 {
-    public PageRequest PageRequest { get; set; }
-
+   // public PageRequest PageRequest { get; set; }
+    public Guid StudentId { get; set; }
     public string[] Roles => [Admin, Read];
-
-    public bool BypassCache { get; }
-    public string? CacheKey => $"GetListNotes({PageRequest.PageIndex},{PageRequest.PageSize})";
-    public string? CacheGroupKey => "GetNotes";
-    public TimeSpan? SlidingExpiration { get; }
 
     public class GetListNoteQueryHandler : IRequestHandler<GetListNoteQuery, GetListResponse<GetListNoteListItemDto>>
     {
@@ -37,10 +34,12 @@ public class GetListNoteQuery : IRequest<GetListResponse<GetListNoteListItemDto>
         public async Task<GetListResponse<GetListNoteListItemDto>> Handle(GetListNoteQuery request, CancellationToken cancellationToken)
         {
             IPaginate<Note> notes = await _noteRepository.GetListAsync(
-                index: request.PageRequest.PageIndex,
-                size: request.PageRequest.PageSize, 
+                predicate: n => n.StudentId == request.StudentId,
+                include: n => n.Include(i => i.Course),
                 cancellationToken: cancellationToken
             );
+
+            var course = _mapper.Map<CourseDto>( new Course() );
 
             GetListResponse<GetListNoteListItemDto> response = _mapper.Map<GetListResponse<GetListNoteListItemDto>>(notes);
             return response;
