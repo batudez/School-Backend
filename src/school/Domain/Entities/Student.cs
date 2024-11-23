@@ -15,8 +15,10 @@ public class Student : Entity<Guid>
     public string Password { get; set; }
     public string PasswordConfirm { get; set; }
     public string ImageUrl { get; set; }
+    public Guid UserId { get; set; }
     public ICollection<Course> TakingCourses { get; set; }
     public ICollection<Note> Notes { get; set; }
     public ICollection<Instructor> Instructors { get; set; }
+    public virtual ICollection<StudentOperationClaim> StudentOperationClaims { get; set; } = default!;
 
 }

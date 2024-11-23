@@ -6,6 +6,8 @@ using Application.Features.Instructors.Queries.GetList;
 using NArchitecture.Core.Application.Requests;
 using NArchitecture.Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Application.Features.Students.Queries.GetByEmailStudent;
+using Application.Features.Instructors.Queries.GetByEmail;
 
 namespace WebAPI.Controllers;
 
@@ -56,6 +58,12 @@ public class InstructorsController : BaseController
 
         GetListResponse<GetListInstructorListItemDto> response = await Mediator.Send(query);
 
+        return Ok(response);
+    }
+    [HttpGet("GetByEmailInstructor")]
+    public async Task<ActionResult<GetByEmailInstructorResponse>> GetByEmailInstructor([FromQuery] GetByEmailInstructorQuery getByEmailInstructorQuery)
+    {
+        GetByEmailInstructorResponse response = await Mediator.Send(getByEmailInstructorQuery);
         return Ok(response);
     }
 }

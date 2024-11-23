@@ -6,6 +6,9 @@ using Application.Features.Notes.Queries.GetList;
 using NArchitecture.Core.Application.Requests;
 using NArchitecture.Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Application.Features.Notes.Queries.GetNotesByStudentId;
+using Application.Features.Notes.Commands.UpdateGrades;
+using Application.Features.Notes.Queries.GetNotesByCourseId;
 
 namespace WebAPI.Controllers;
 
@@ -26,6 +29,12 @@ public class NotesController : BaseController
     {
         UpdatedNoteResponse response = await Mediator.Send(command);
 
+        return Ok(response);
+    }
+    [HttpPut("update-grades")]
+    public async Task<IActionResult> UpdateGrades([FromBody] UpdateGradesCommand command)
+    {
+        UpdatedGradesResponse response  = await Mediator.Send(command);
         return Ok(response);
     }
 
@@ -50,9 +59,25 @@ public class NotesController : BaseController
     }
 
     [HttpGet]
-    public async Task<ActionResult<GetListResponse<GetListNoteListItemDto>>> GetList([FromQuery] PageRequest pageRequest)
+    public async Task<ActionResult<GetListResponse<GetListNoteListItemDto>>> GetList([FromQuery] GetListNoteQuery request)
     {
-        GetListNoteQuery query = new() { PageRequest = pageRequest };
+        GetListNoteQuery query = new() { StudentId = request.StudentId};
+
+        GetListResponse<GetListNoteListItemDto> response = await Mediator.Send(query);
+
+        return Ok(response);
+    }
+    
+    [HttpGet("GetNotesByStudentId")]
+    public async Task<ActionResult<GetNotesByStudentIdResponse>> GetNotesByStudentId([FromQuery] GetNotesByStudentIdQuery getNotesByStudentIdQuery)
+    {
+        GetNotesByStudentIdResponse response = await Mediator.Send(getNotesByStudentIdQuery);
+        return Ok(response);
+    }
+    [HttpGet("GetNotesByCourseId")]
+    public async Task<ActionResult<GetListResponse<GetListNoteListItemDto>>> GetList([FromQuery] GetNotesByCourseIdQuery request)
+    {
+        GetNotesByCourseIdQuery query = new() { CourseId = request.CourseId };
 
         GetListResponse<GetListNoteListItemDto> response = await Mediator.Send(query);
 

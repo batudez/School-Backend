@@ -7,6 +7,8 @@ using AutoMapper;
 using NArchitecture.Core.Application.Responses;
 using Domain.Entities;
 using NArchitecture.Core.Persistence.Paging;
+using Application.Features.Instructors.Queries.GetById;
+using Application.Features.Courses.Queries.GetByInstructorId;
 
 namespace Application.Features.Courses.Profiles;
 
@@ -16,6 +18,11 @@ public class MappingProfiles : Profile
     {
         CreateMap<CreateCourseCommand, Course>();
         CreateMap<Course, CreatedCourseResponse>();
+
+      //  CreateMap<GetByInstructorIdItemDto,Course>().ReverseMap();
+
+        CreateMap<Course, GetByInstructorIdItemDto>();
+        CreateMap<IPaginate<Course>, GetListResponse<GetByInstructorIdItemDto>>();
 
         CreateMap<UpdateCourseCommand, Course>();
         CreateMap<Course, UpdatedCourseResponse>();

@@ -13,5 +13,6 @@ public class CreateStudentCommandValidator : AbstractValidator<CreateStudentComm
         RuleFor(c => c.Password).NotEmpty();
         RuleFor(c => c.PasswordConfirm).NotEmpty();
         RuleFor(c => c.ImageUrl).NotEmpty();
+        RuleFor(c => c.UserId).NotEmpty();
     }
 }

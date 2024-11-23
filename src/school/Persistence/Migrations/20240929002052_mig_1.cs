@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class mig_initial : Migration
+    public partial class mig_1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -398,12 +398,12 @@ namespace Persistence.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "AuthenticatorType", "CreatedDate", "DeletedDate", "Email", "PasswordHash", "PasswordSalt", "UpdatedDate" },
-                values: new object[] { new Guid("1e260ab0-1743-4b24-9ce1-c65ae37dad29"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "narch@kodlama.io", new byte[] { 9, 226, 58, 1, 243, 240, 28, 45, 85, 11, 68, 181, 95, 170, 71, 21, 89, 177, 236, 27, 126, 236, 142, 189, 102, 123, 157, 242, 111, 71, 119, 123, 45, 77, 38, 35, 104, 84, 165, 209, 241, 233, 97, 248, 56, 88, 22, 154, 102, 115, 195, 206, 88, 58, 91, 211, 140, 83, 221, 89, 145, 140, 57, 151 }, new byte[] { 55, 159, 126, 66, 60, 160, 205, 154, 104, 93, 195, 171, 172, 22, 149, 219, 80, 210, 198, 138, 96, 87, 217, 187, 149, 133, 119, 21, 103, 21, 61, 5, 126, 34, 42, 185, 110, 226, 182, 219, 159, 179, 140, 188, 248, 61, 69, 28, 91, 137, 194, 226, 170, 56, 235, 86, 152, 240, 226, 156, 52, 110, 132, 132, 38, 38, 237, 23, 119, 132, 101, 53, 188, 35, 174, 62, 91, 150, 161, 144, 235, 10, 147, 228, 123, 69, 141, 218, 147, 249, 134, 62, 11, 61, 218, 54, 79, 154, 254, 36, 237, 122, 17, 197, 245, 29, 95, 101, 179, 195, 97, 95, 228, 211, 185, 130, 8, 209, 69, 83, 238, 205, 77, 25, 139, 186, 230, 122 }, null });
+                values: new object[] { new Guid("5f5e55a2-c69c-4eb6-a0b8-d044c88ed9ab"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "narch@kodlama.io", new byte[] { 140, 53, 150, 108, 90, 202, 136, 140, 155, 84, 17, 71, 8, 111, 208, 160, 233, 130, 113, 236, 227, 226, 238, 186, 40, 134, 192, 80, 96, 83, 201, 237, 185, 105, 2, 57, 127, 217, 89, 234, 244, 148, 131, 215, 149, 137, 245, 91, 58, 163, 248, 158, 169, 238, 66, 87, 83, 221, 187, 237, 103, 221, 186, 36 }, new byte[] { 216, 26, 243, 54, 248, 223, 248, 176, 151, 34, 223, 36, 223, 141, 130, 161, 47, 59, 56, 184, 243, 32, 242, 89, 206, 132, 251, 213, 45, 47, 74, 91, 239, 223, 22, 50, 40, 232, 108, 182, 110, 211, 135, 108, 182, 254, 6, 66, 164, 207, 191, 169, 23, 189, 35, 125, 220, 75, 248, 17, 28, 190, 148, 252, 217, 169, 97, 54, 195, 141, 155, 247, 195, 65, 25, 252, 153, 87, 54, 146, 98, 46, 171, 255, 252, 125, 179, 101, 51, 184, 127, 106, 107, 160, 155, 155, 2, 113, 201, 71, 152, 142, 175, 74, 143, 176, 124, 129, 6, 141, 177, 106, 21, 32, 115, 180, 252, 140, 96, 242, 166, 11, 122, 217, 137, 109, 185, 44 }, null });
 
             migrationBuilder.InsertData(
                 table: "UserOperationClaims",
                 columns: new[] { "Id", "CreatedDate", "DeletedDate", "OperationClaimId", "UpdatedDate", "UserId" },
-                values: new object[] { new Guid("141cd128-1ec6-4093-b352-1aabcbe143a2"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, null, new Guid("1e260ab0-1743-4b24-9ce1-c65ae37dad29") });
+                values: new object[] { new Guid("78ccbf57-51e2-41e4-beae-3687a88562e5"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, null, new Guid("5f5e55a2-c69c-4eb6-a0b8-d044c88ed9ab") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_InstructorId",

@@ -14,6 +14,8 @@ using Application.Features.Notes.Constants;
 using Application.Features.Students.Constants;
 using Application.Features.Students.Constants;
 using Application.Features.Students.Constants;
+using Application.Features.Students.Constants;
+
 
 
 
@@ -225,6 +227,24 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
         );
         #endregion
         
+        
+        #region Students CRUD
+        featureOperationClaims.AddRange(
+            [
+                new() { Id = ++lastId, Name = StudentsOperationClaims.Admin },
+                new() { Id = ++lastId, Name = StudentsOperationClaims.Read },
+                new() { Id = ++lastId, Name = StudentsOperationClaims.Write },
+                new() { Id = ++lastId, Name = StudentsOperationClaims.Create },
+                new() { Id = ++lastId, Name = StudentsOperationClaims.Update },
+                new() { Id = ++lastId, Name = StudentsOperationClaims.Delete },
+            ]
+        );
+        #endregion
+        
+        
+        featureOperationClaims.Add(new() { Id = ++lastId, Name = StudentsOperationClaims.GetByEmailStudent });
+        
+        featureOperationClaims.Add(new() { Id = ++lastId, Name = NotesOperationClaims.GetNotesByStudentId });
         return featureOperationClaims;
     }
 #pragma warning restore S1854 // Unused assignments should be removed

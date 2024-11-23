@@ -1,6 +1,7 @@
 using Application;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NArchitecture.Core.CrossCuttingConcerns.Exception.WebApi.Extensions;
@@ -13,7 +14,11 @@ using NArchitecture.Core.Security.Encryption;
 using NArchitecture.Core.Security.JWT;
 using NArchitecture.Core.Security.WebApi.Swagger.Extensions;
 using Persistence;
+using Serilog;
+using Serilog.Core;
+using Serilog.Sinks.PostgreSQL;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Security.Claims;
 using WebAPI;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -35,6 +40,37 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddHttpContextAccessor();
 
+Logger log = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log.txt")
+    .WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("DefaultConnection"), "logs",
+    needAutoCreateTable: true,
+    columnOptions: new Dictionary<string, ColumnWriterBase>
+    {
+        {"message", new RenderedMessageColumnWriter() },
+        {"message_template", new MessageTemplateColumnWriter() },
+        {"level", new LevelColumnWriter() },
+        {"time_stamp", new TimestampColumnWriter() },
+        {"exception", new ExceptionColumnWriter() },
+        {"log_event", new LogEventSerializedColumnWriter() },
+    })
+    .WriteTo.Seq("http://localhost:5435/")
+    .Enrich.FromLogContext()
+    .MinimumLevel.Information()
+    .CreateLogger();
+
+builder.Host.UseSerilog(log);
+
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = HttpLoggingFields.All;
+    logging.RequestHeaders.Add("sec-ch-ua");
+    logging.MediaTypeOptions.AddText("application/javascript");
+    logging.RequestBodyLogLimit = 4096;
+    logging.ResponseBodyLogLimit = 4096;
+    logging.CombineLogs = true;
+});
+
 const string tokenOptionsConfigurationSection = "TokenOptions";
 TokenOptions tokenOptions =
     builder.Configuration.GetSection(tokenOptionsConfigurationSection).Get<TokenOptions>()
@@ -51,7 +87,9 @@ builder
             ValidIssuer = tokenOptions.Issuer,
             ValidAudience = tokenOptions.Audience,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
+            IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey),
+           // NameClaimType = ClaimTypes.Email
+
         };
     });
 
@@ -72,7 +110,8 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.WriteIndented = true; // Optional for readable JSON formatting
     });
 
-builder.Services.AddSwaggerGen(opt =>
+builder.Services.AddSwaggerGen(
+    opt =>
 {
     opt.AddSecurityDefinition(
         name: "Bearer",
@@ -89,7 +128,9 @@ builder.Services.AddSwaggerGen(opt =>
         }
     );
     opt.OperationFilter<BearerSecurityRequirementOperationFilter>();
-});
+}
+
+);
 
 WebApplication app = builder.Build();
 
@@ -103,8 +144,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+
 if (app.Environment.IsProduction())
     app.ConfigureCustomExceptionMiddleware();
+
+app.UseSerilogRequestLogging();
+app.UseHttpLogging();
 
 app.UseDbMigrationApplier();
 
