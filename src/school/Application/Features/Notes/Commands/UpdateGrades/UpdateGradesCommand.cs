@@ -1,5 +1,6 @@
 ﻿using Application.Features.Notes.Commands.Update;
 using Application.Features.Notes.Rules;
+using Application.Services.Hubs;
 using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
@@ -26,13 +27,15 @@ public class UpdateGradesCommand : IRequest<UpdatedGradesResponse>
         private readonly INoteRepository _noteRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<UpdateGradesCommandHandler> _logger;
+        private readonly INoteHubService _noteHubService;
         //private readonly INoteBusinessRules _noteBusinessRules;
 
-        public UpdateGradesCommandHandler(INoteRepository noteRepository, IMapper mapper, ILogger<UpdateGradesCommandHandler> logger)
+        public UpdateGradesCommandHandler(INoteRepository noteRepository, IMapper mapper, ILogger<UpdateGradesCommandHandler> logger, INoteHubService noteHubService)
         {
             _noteRepository = noteRepository;
             _mapper = mapper;
             _logger = logger;
+            _noteHubService = noteHubService;
             //_noteBusinessRules = noteBusinessRules;
         }
 
@@ -65,7 +68,7 @@ public class UpdateGradesCommand : IRequest<UpdatedGradesResponse>
                 UpdatedNotes = _mapper.Map<List<UpdatedNoteResponse>>(updatedNotes)
             };
 
-            
+            await _noteHubService.NoteUpdatedMessageAsync("Notlar güncellendi");
             return response;
         }
     }

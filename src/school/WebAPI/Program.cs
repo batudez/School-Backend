@@ -1,5 +1,6 @@
 using Application;
 using Infrastructure;
+using SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.IdentityModel.Tokens;
@@ -20,6 +21,7 @@ using Serilog.Sinks.PostgreSQL;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Security.Claims;
 using WebAPI;
+using SignalR.Hubs;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,8 @@ builder.Services.AddApplicationServices(
 );
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
+builder.Services.AddSignalRServices();
+builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 
 Logger log = new LoggerConfiguration()
@@ -157,6 +161,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<NoteHub>("/notes-hub");
 
 const string webApiConfigurationSection = "WebAPIConfiguration";
 WebApiConfiguration webApiConfiguration =
