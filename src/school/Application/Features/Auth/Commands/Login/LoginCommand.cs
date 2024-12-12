@@ -1,10 +1,11 @@
 ﻿using Application.Features.Auth.Rules;
 using Application.Services.AuthenticatorService;
 using Application.Services.AuthService;
+using Application.Services.Instructors;
+using Application.Services.Students;
 using Application.Services.UsersService;
 using Domain.Entities;
 using MediatR;
-using NArchitecture.Core.Application.Dtos;
 using NArchitecture.Core.Security.Enums;
 using NArchitecture.Core.Security.JWT;
 
@@ -12,6 +13,7 @@ namespace Application.Features.Auth.Commands.Login;
 
 public class LoginCommand : IRequest<LoggedResponse>
 {
+    //public UserForLoginDto UserForLoginDto { get; set; }
     public UserForLoginDto UserForLoginDto { get; set; }
     public string IpAddress { get; set; }
 
@@ -33,18 +35,23 @@ public class LoginCommand : IRequest<LoggedResponse>
         private readonly IAuthenticatorService _authenticatorService;
         private readonly IAuthService _authService;
         private readonly IUserService _userService;
-
+        private readonly IStudentService _studentService; // todo
+        private readonly IInstructorService _instructorService;
         public LoginCommandHandler(
             IUserService userService,
             IAuthService authService,
             AuthBusinessRules authBusinessRules,
             IAuthenticatorService authenticatorService
-        )
+,
+            IStudentService studentService,
+            IInstructorService instructorService)
         {
             _userService = userService;
             _authService = authService;
             _authBusinessRules = authBusinessRules;
             _authenticatorService = authenticatorService;
+            _studentService = studentService;
+            _instructorService = instructorService;
         }
 
         public async Task<LoggedResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -53,10 +60,36 @@ public class LoginCommand : IRequest<LoggedResponse>
                 predicate: u => u.Email == request.UserForLoginDto.Email,
                 cancellationToken: cancellationToken
             );
+
             await _authBusinessRules.UserShouldBeExistsWhenSelected(user);
             await _authBusinessRules.UserPasswordShouldBeMatch(user!, request.UserForLoginDto.Password);
-
             LoggedResponse loggedResponse = new();
+
+            // todo: student or instructor check
+            if (request.UserForLoginDto.IsLoggerInstructor)
+            {
+                Instructor instructor = await _instructorService.GetAsync(predicate: u => u.Email == request.UserForLoginDto.Email);
+                if (instructor != null)
+                {
+                    loggedResponse.SchoolId = instructor.Id;
+                }
+                else
+                {
+                    return null;
+                }
+            } else
+            {
+                Student student = await _studentService.GetAsync(predicate: u => u.Email == request.UserForLoginDto.Email);
+                if (student != null)
+                {
+                    loggedResponse.SchoolId = student.Id;
+                }
+                else
+                {
+                    return null;
+                }     
+            }
+           
             loggedResponse.Email = request.UserForLoginDto.Email;
 
             if (user!.AuthenticatorType is not AuthenticatorType.None)
