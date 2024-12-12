@@ -9,7 +9,7 @@ using Application.Features.Auth.Commands.VerifyOtpAuthenticator;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using NArchitecture.Core.Application.Dtos;
+using Application.Features.Auth.Commands.Register;
 
 namespace WebAPI.Controllers;
 
@@ -28,7 +28,7 @@ public class AuthController : BaseController
     }
 
     [HttpPost("Login")]
-    public async Task<IActionResult> Login([FromBody] UserForLoginDto userForLoginDto)
+    public async Task<IActionResult> Login([FromBody] Application.Features.Auth.Commands.Login.UserForLoginDto userForLoginDto)
     {
         LoginCommand loginCommand = new() { UserForLoginDto = userForLoginDto, IpAddress = getIpAddress() };
         LoggedResponse result = await Mediator.Send(loginCommand);

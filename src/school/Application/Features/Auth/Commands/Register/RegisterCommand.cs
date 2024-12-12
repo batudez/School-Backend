@@ -31,16 +31,22 @@ public class RegisterCommand : IRequest<RegisteredResponse>
         private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
         private readonly AuthBusinessRules _authBusinessRules;
+        private readonly IStudentRepository _studentRepository;
+        private readonly IInstructorRepository _instructorRepository;
 
         public RegisterCommandHandler(
             IUserRepository userRepository,
             IAuthService authService,
             AuthBusinessRules authBusinessRules
-        )
+,
+            IStudentRepository studentRepository,
+            IInstructorRepository instructorRepository)
         {
             _userRepository = userRepository;
             _authService = authService;
             _authBusinessRules = authBusinessRules;
+            _studentRepository = studentRepository;
+            _instructorRepository = instructorRepository;
         }
 
         public async Task<RegisteredResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -60,6 +66,33 @@ public class RegisterCommand : IRequest<RegisteredResponse>
                     PasswordSalt = passwordSalt,
                 };
             User createdUser = await _userRepository.AddAsync(newUser);
+            if(request.UserForRegisterDto.IsInstructor)
+            {
+                Instructor newInstructor = new()
+                {
+                    NameSurname = request.UserForRegisterDto.NameSurname,
+                    Email = request.UserForRegisterDto.Email,
+                    Password = request.UserForRegisterDto.Password,
+                    PasswordConfirm = request.UserForRegisterDto.Password,
+                    Address = request.UserForRegisterDto.Address,
+                    ImageUrl = request.UserForRegisterDto.ImageUrl
+                };
+               await _instructorRepository.AddAsync(newInstructor);
+            } else
+            {
+                Student newStudent = new()
+                {
+                    NameSurname = request.UserForRegisterDto.NameSurname,
+                    Email = request.UserForRegisterDto.Email,
+                    Password = request.UserForRegisterDto.Password,
+                    PasswordConfirm = request.UserForRegisterDto.Password,
+                    TelephoneNumber = request.UserForRegisterDto.TelephoneNumber,
+                    Address = request.UserForRegisterDto.Address,
+                    ImageUrl = request.UserForRegisterDto.ImageUrl
+                };
+                await _studentRepository.AddAsync(newStudent);
+            }
+
 
             AccessToken createdAccessToken = await _authService.CreateAccessToken(createdUser);
 

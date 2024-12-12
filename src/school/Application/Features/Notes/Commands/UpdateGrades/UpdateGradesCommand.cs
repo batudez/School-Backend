@@ -46,23 +46,17 @@ public class UpdateGradesCommand : IRequest<UpdatedGradesResponse>
 
             foreach (var gradeUpdate in request.GradeUpdates)
             {
-                // Öğrencinin mevcut notunu alıyoruz
+             
                 Note? note = await _noteRepository.GetAsync(predicate: n => n.StudentId == gradeUpdate.StudentId,
                     cancellationToken: cancellationToken);
 
-                // Notun var olup olmadığını kontrol ediyoruz
-                //await _noteBusinessRules.NoteShouldExistWhenSelected(note);
-
-                // Yeni notu not nesnesine güncelliyoruz
                 note.Value = gradeUpdate.Value;
 
-                // Veritabanında güncellemeyi gerçekleştiriyoruz
                 await _noteRepository.UpdateAsync(note!);
 
                 updatedNotes.Add(note);
             }
 
-            // Geri döneceğimiz response'ı oluşturuyoruz
             var response = new UpdatedGradesResponse
             {
                 UpdatedNotes = _mapper.Map<List<UpdatedNoteResponse>>(updatedNotes)
